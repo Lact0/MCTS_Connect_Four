@@ -1,3 +1,6 @@
+print('Play First (1) or Second (2)?')
+goFirst = input() == '1'
+
 from monteCarloTree import *
 from visuals import *
 import os
@@ -19,6 +22,8 @@ def showConfidence(confidence):
     c = int((120 - len(s)) / 2)
     screen.addstr(25, c, s)
 
+
+
 screen.border()
 
 board = getBitBoard()
@@ -26,20 +31,25 @@ drawBoard(board)
 
 tree = MonteCarloTree(board, 0)
 
-while True:
-    move = getConnectFourMove(board)
-    board = makeMove(board, 0, move)
-    tree.makeMove(move)
-    drawBoard(board)
+firstTurn = True
 
-    if (data := checkWin(board))[0]:
-        finishGame(data[1])
-        break
+while True:
+    if goFirst or (not firstTurn):
+        move = getConnectFourMove(board)
+        board = makeMove(board, 1 - goFirst, move)
+        tree.makeMove(move)
+        drawBoard(board)
+
+        if (data := checkWin(board))[0]:
+            finishGame(data[1])
+            break
+
+    firstTurn = False
 
     for i in range(5000):
         tree.step()
 
-    board = makeMove(board, 1, tree.getBestMove())
+    board = makeMove(board, 0 + goFirst, tree.getBestMove())
     drawBoard(board)
     showConfidence(1 - (tree.root.wins / tree.root.visits))
 
