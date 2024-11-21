@@ -22,8 +22,6 @@ def showConfidence(confidence):
     c = int((120 - len(s)) / 2)
     screen.addstr(25, c, s)
 
-
-
 screen.border()
 
 board = getBitBoard()
@@ -46,7 +44,7 @@ while True:
 
     firstTurn = False
 
-    for i in range(5000):
+    for i in range(10000):
         tree.step()
 
     board = makeMove(board, 0 + goFirst, tree.getBestMove())
